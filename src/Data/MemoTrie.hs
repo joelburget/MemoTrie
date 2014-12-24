@@ -9,12 +9,12 @@
 -- Module      :  Data.MemoTrie
 -- Copyright   :  (c) Conal Elliott 2008-2012
 -- License     :  BSD3
--- 
+--
 -- Maintainer  :  conal@conal.net
 -- Stability   :  experimental
--- 
+--
 -- Trie-based memoizer
--- 
+--
 -- Adapted from sjanssen's paste: \"a lazy trie\" <http://hpaste.org/3839>,
 -- which I think is based on Ralf Hinze's paper "Memo Functions,
 -- Polytypically!".
@@ -149,7 +149,7 @@ inTrie3 = untrie ~> inTrie2
 
 instance HasTrie Void where
   -- As suggested by Audun Skaugen
-  data Void :->: a = VoidTrie 
+  data Void :->: a = VoidTrie
   trie _ = VoidTrie
   untrie VoidTrie = absurd
   enumerate VoidTrie = []
@@ -169,7 +169,7 @@ instance HasTrie () where
       == { untrie def }
     \ () -> (f ())
       == { const-unit }
-    f   
+    f
 
     trie (untrie (UnitTrie a))
       == { untrie def }
@@ -336,7 +336,6 @@ WordInstance(Word64,Word64Trie)
 --     untrie (WordTrie t) = untrie t . bits
 --     enumerate (WordTrie t) = enum' unbits t
 
-
 -- | Extract bits in little-endian order
 bits :: (Num t, Bits t) => t -> [Bool]
 bits 0 = []
@@ -381,10 +380,9 @@ IntInstance(Int64,Word64,Int64Trie)
 
 instance HasTrie Integer where
     newtype Integer :->: a = IntegerTrie ((Bool,[Bool]) :->: a)
-    trie f = IntegerTrie (trie (f . unbitsZ))
+--     trie f = IntegerTrie (trie (f . unbitsZ))
     untrie (IntegerTrie t) = untrie t . bitsZ
-    enumerate (IntegerTrie t) = enum' unbitsZ t
-
+--     enumerate (IntegerTrie t) = enum' unbitsZ t
 
 unbitsZ :: (Num n, Bits n) => (Bool,[Bool]) -> n
 unbitsZ (positive,bs) = sig (unbits bs)
